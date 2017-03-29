@@ -230,5 +230,5 @@ fromText e t = fromByteString (encoder e t)
 -- Lookup a character code in some monad (usually a parser)
 safeChr :: Monad m => Int -> m Char
 safeChr c = do
-    when (c > 111411) (fail $ "Invalid character code: " ++ show c)
+    when (c > 1114111) (fail $ "Invalid character code: " ++ show c)
     return $ chr c
