@@ -343,8 +343,7 @@ finishCharRef = P.char '#' *> (hexCharRef <|> decCharRef)
     decCharRef = do
         ds <- some digit
         _ <- P.char ';'
-        let c = chr $ foldl' (\a b -> 10 * a + b) 0 ds
-        return c
+        safeChr $ foldl' (\a b -> 10 * a + b) 0 ds
       where
         digit = do
             d <- P.satisfy (\c -> c >= '0' && c <= '9')
@@ -353,8 +352,7 @@ finishCharRef = P.char '#' *> (hexCharRef <|> decCharRef)
         _ <- P.char 'x' <|> P.char 'X'
         ds <- some digit
         _ <- P.char ';'
-        let c = chr $ foldl' (\a b -> 16 * a + b) 0 ds
-        return c
+        safeChr $ foldl' (\a b -> 16 * a + b) 0 ds
       where
         digit = num <|> upper <|> lower
         num = do

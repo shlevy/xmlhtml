@@ -506,7 +506,7 @@ charRef = hexCharRef <|> decCharRef
         _ <- text "&#"
         ds <- some digit
         _ <- P.char ';'
-        let c = chr $ foldl' (\a b -> 10 * a + b) 0 ds
+        c <- safeChr $ foldl' (\a b -> 10 * a + b) 0 ds
         when (not (isValidChar c)) $ fail $
             "Reference is not a valid character"
         return $ T.singleton c
@@ -518,6 +518,8 @@ charRef = hexCharRef <|> decCharRef
         _ <- text "&#x"
         ds <- some digit
         _ <- P.char ';'
+        -- c <- safeChr $ foldl' (\a b -> 16 * a + b) 0 ds
+        -- TODO: This causes oasis tests to fail
         let c = chr $ foldl' (\a b -> 16 * a + b) 0 ds
         when (not (isValidChar c)) $ fail $
             "Reference is not a valid character"

@@ -5,6 +5,8 @@
 module Text.XmlHtml.Common where
 
 import           Blaze.ByteString.Builder
+import           Control.Monad (when)
+import           Data.Char (chr)
 import           Data.Maybe
 
 import           Data.Text (Text)
@@ -223,3 +225,10 @@ isUTF16 e = e == UTF16BE || e == UTF16LE
 fromText :: Encoding -> Text -> Builder
 fromText e t = fromByteString (encoder e t)
 
+
+------------------------------------------------------------------------------
+-- Lookup a character code in some monad (usually a parser)
+safeChr :: Monad m => Int -> m Char
+safeChr c = do
+    when (c > 111411) (fail $ "Invalid character code: " ++ show c)
+    return $ chr c
